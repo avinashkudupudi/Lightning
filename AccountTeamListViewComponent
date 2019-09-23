@@ -1,0 +1,56 @@
+<aura:component controller="AccountTeamListController" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global">
+<aura:attribute name="recordId" type="id"/>
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+<aura:attribute name="AccountTeamMembers" type="AccountTeamMember[]"/>
+<article class="slds-card slds-card_boundary">
+  <div class="slds-card__header slds-grid">
+    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+      <div class="slds-media__figure">
+        <span class="slds-icon_container slds-icon-standard-team_member" title="AccountTeam">
+          <lightning:icon iconName="standard:team_member" size="medium" alternativeText="AccountTeam"/>
+          <span class="slds-assistive-text">AccountTeam</span>
+        </span>
+      </div>
+      <div class="slds-media__body">
+        <h2 class="slds-card__header-title">
+            <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="AccountTeam">
+            <span>AccountTeam</span>
+          </a>
+        </h2>
+      </div>
+    </header>
+  </div>
+  <div class="slds-card__body">    
+<table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-row-number">
+  <thead>
+    <tr class="slds-line-height_reset">
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Team Member Name">Team Member Name</div>
+      </th>
+        <th class="" scope="col">
+        <div class="slds-truncate" title="Team Role">Team Role</div>
+      </th>
+        <th class="" scope="col">
+        <div class="slds-truncate" title="Account Access">Account Access</div>
+      </th>
+      </tr>
+    </thead>
+    <tbody>
+    <aura:iteration items="{!v.AccountTeamMembers}" var="AccountTeamMember">
+    <tr class="slds-hint-parent">  
+      <th data-label="Team Member Name" scope="row">
+        <div class="slds-truncate" title="Team Member Name">{!AccountTeamMember.User.Name}</div>
+      </th>
+      <td data-label="Team Role">
+        <div class="slds-truncate" title="Team Role">{!AccountTeamMember.TeamMemberRole}</div>
+      </td>
+      <td data-label="Account Access">
+        <div class="slds-truncate" title="Account Access">{!AccountTeamMember.AccountAccessLevel}</div>
+      </td>      
+    </tr>
+    </aura:iteration>
+    </tbody>
+    </table>
+    </div>
+    </article>
+</aura:component>
