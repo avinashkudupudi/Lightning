@@ -1,0 +1,13 @@
+({
+doInit : function(component, event, helper) {
+ 
+var action = component.get("c.getATMs");
+action.setParams({
+"AccountId": component.get("v.recordId")
+});
+action.setCallback(this, function(a) {
+component.set("v.AccountTeamMembers", a.getReturnValue());
+});
+$A.enqueueAction(action);
+}
+})
