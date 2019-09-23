@@ -1,0 +1,6 @@
+public class AccountTeamListController {
+@AuraEnabled
+    public static list<AccountTeamMember> getATMs(Id AccountId){
+        return [select id, TeamMemberRole, User.Name, AccountAccessLevel from AccountTeamMember where AccountId=:AccountId];
+    }
+}
