@@ -1,0 +1,111 @@
+<!-- Created as part of Needs Assistance. 
+  Used in Needs Assistance Wizard. 
+  Developed as part of User story - 4698 -->
+
+<aura:component implements="force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,force:hasRecordId" 
+                access="global"
+                controller="NAW_SpousalAssistanceAuraController">
+    <aura:attribute name="fields" type="String[]" /> 
+    <aura:attribute name="objName" type="String" default="Spousal_Assist_Request__c"/>
+    <aura:attribute name="recId" type="id"/>
+    <aura:attribute name="recordId" type="id"/>
+    <aura:attribute name="serviceArea" type="String"/>
+    <aura:attribute name="serviceType" type="String"/>
+    <aura:attribute name="serviceAreaType" type="String"/>
+    <aura:attribute name="serviceCity" type="String" default=""/>
+    <aura:attribute name="serviceState" type="String" default=""/>
+    <aura:attribute name="serviceCountry" type="String" default=""/>
+    <aura:attribute name="serviceZip" type="String" default=""/>
+    <aura:attribute name="Accounts" type="Account[]"/>
+    <aura:attribute name="Assignment" type="Move__c" default="{'sObjectType': 'Move__c'}"/>
+    <aura:attribute name="spousalAsstReq" type="Spousal_Assist_Request__c" default="{'sObjectType': 'Spousal_Assist_Request__c'}"/>
+    <aura:attribute name="btnName" type="String" default="Save"/>
+    <aura:attribute name="varStage" type="string" default="1"/>
+    <aura:attribute name="workEligibility" type="String" default=""/>
+    <aura:attribute name="validSpouseExist" type="Boolean" default="false"/>
+    <aura:attribute name="spouseName" type="String" default=""/>
+    <aura:attribute name="loader" type="Boolean" default="false"/>
+    
+    <aura:registerEvent name="ServiceReqEvent" type="c:ServiceReqEvent"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--<aura:handler name="change" value="{!v.serviceArea}" action="{!c.onSAreaChange}"/>-->
+    <!--<aura:handler name="change" value="{!v.workEligibility}" action="{!c.saveData}"/>-->
+    <ltng:require styles="{!$Resource.ModelCSS8090}"/>
+    
+    <aura:if isTrue="{!v.loader}">
+    	<lightning:spinner aura:id="mySpinner" variant="brand" size="medium" alternativeText="Processing ..."/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.validSpouseExist}">
+        <h4 class="slds-text-heading_medium" ><b>Spousal Assist Request</b></h4>
+        <br/><br/>
+        <aura:if isTrue="{!equals(v.varStage,'1')}">
+            <div class="slds- grid slds- wrap slds- gutters slds-size_ 1-of-1" style="width:100%;">
+                <div aura:id="input1" class="slds-size_1-of-1 " style="display:block;">
+                    
+                    <div class="slds-grid slds-wrap slds -m-around_small">
+                        <div class="slds-col slds-size_1-of-5 slds-m-around_ xx-small">
+                            <!--<lightning:input disabled="true" type="text" label="Client Name" class="slds-size_ 1-of-1" value="{!v.Assignment.Client__r.Name}"/>-->
+                            <b>Client Name </b> <br/> <ui:outputText class="slds-size_ 1-of-1" value="{!v.Assignment.Client__r.Name}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-m-around_ xx-small">
+                            <!--<lightning:input disabled="true" type="text" label="Transferee First Name" class="slds-size_ 1-of-1" value="{!v.Assignment.Transferee__r.FirstName}"/>-->
+                            <b>Customer Name </b> <br/> <ui:outputText class="slds-size_ 1-of-1" value="{!v.Assignment.Customer__r.FirstName +' '+ v.Assignment.Customer__r.LastName}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-m-around_ xx-small">
+                            <!--<lightning:input disabled="true" type="text" label="" class="slds-size_ 1-of-1" value="{!v.Assignment.Transferee__r.Preferred_Method_of_Communication__c}"/>-->
+                            <b>Preferred Communication </b> <br/> <ui:outputText class="slds-size_ 1-of-1" value="{!v.Assignment.Customer__r.Preferred_Contact_Number_Email__c}"/>
+                        </div>
+                        <div class="slds-col slds-size_1-of-5 slds-m-around_ xx-small">
+                            <!--<lightning:input disabled="true" type="text" label="Transferee Spouse Name" class="slds-size_ 1-of-1" value="{!v.Assignment.Transferee__r.Spouse_Partner_Contact__r.Name}"/>-->
+                            <!--<b>Spouse Name </b> <br/> <ui:outputText class="slds-size_ 1-of-1" value="{!v.Assignment.Customer__r.Spouse_Partner_Contact__r.Name}"/>-->
+                            <b>Spouse Name </b> <br/> <ui:outputText class="slds-size_ 1-of-1" value="{!v.spouseName}"/>
+                        </div> 
+                        <div class="slds-col slds-size_1-of-5 slds-m-around_ xx-small">
+                            <b>Policy </b> <br/> <ui:outputText value="{!v.Assignment.Policy__r.Name}"/>
+                            <!--<lightning:input disabled="true" type="text" label="Policy" value="{!v.Assignment.Policy__r.Name}"/>-->
+                        </div>
+                        <div class="slds-col slds-size_1-of-1 slds-p-around_small"/>
+                        <div class="slds-col slds-size_1-of-8 slds-m-around_ xx-small">
+                            <!--<lightning:input disabled="true" type="checkbox" variant="label-stacked" label="VIP" value="{!v.Assignment.VIP__c}"/>-->
+                            <b>VIP </b> <br/> <ui:outputText value="{!v.Assignment.VIP__c}"/>
+                        </div> 
+                        <!--<div class="slds-col slds-size_1-of-6">
+                             <c:Picklist_CMP sObjectName="Spousal_Assist_Request__c" fieldName="Work_Eligibility__c" label="Work Eligibility" value="{!v.workEligibility}"/>
+                            </div>-->
+                    </div> <br/><br/>
+                    <lightning:notificationsLibrary aura:id="notificationsLibrary"/>
+                    <!--<div class="slds-size_1-of-1">
+                        <lightning:recordEditForm aura:id="form"
+                                                  objectApiName="{!v.objName}"
+                                                  recordId = "{!v.recId}"
+                                                  onsubmit="{!c.handleOnSubmit}"
+                                                  onsuccess="{!c.handleOnSuccess}"
+                                                  class="slds-card__body_inner">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-size_1-of-1 slds-align_absolute-center">
+                                    <lightning:messages/>
+                                </div>
+                                
+                                <aura:iteration items="{!v.fields}" var="field" indexVar="ind">
+                                    <div class="slds-size_1-of-3 slds-p-around _small">
+                                        <lightning:inputField variant="label-stacked" fieldName="{!field}"/>
+                                    </div>
+                                </aura:iteration>
+                            </div>
+                            <div class="slds-size_1-of-1 slds-p-around_small"/>
+                            <div class="slds-float-right">
+                                <lightning:button variant="brand" label="{!v.btnName}" type="submit"/>-->
+                                <!--<lightning:button variant="neutral" label="Cancel" onclick="{!c.closePopUp}"/>-->
+                            <!--</div>
+                        </lightning:recordEditForm>
+                    </div>-->
+                    <div class="slds-float--right">
+                        <lightning:button variant="brand" label="{!v.btnName}" onclick="{!c.saveData}"/>
+                    </div>
+                </div>
+            </div>
+        </aura:if>
+    </aura:if>
+</aura:component>
